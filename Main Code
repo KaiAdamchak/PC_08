@@ -13,6 +13,9 @@ w = 600
 h = 600
 win = pygame.display.set_mode((w, h))
 
+frame_count = 0
+frame_rate = 30
+
 # make a rectangle Surface & add to window
 class Bubble:
     def __init__(self):
@@ -50,8 +53,17 @@ def main():
         
         bubble.show() #show the bubble
         
+        frame_count +=1
         pygame.display.update()
-        clock.tick(30) #frames per minute
+        clock.tick(frame_rate) #frames per minute
+
+#TIMER
+total_seconds = (frame_count // frame_rate)
+if total_seconds < 0:
+    total_seconds = 0
+if total_seconds == 1:
+    print("Game Over")
+    pygame.display.quit()
 
 #  ========= Runs the code: ========= 
 main()
