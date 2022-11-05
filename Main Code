@@ -57,7 +57,7 @@ def main():
         pygame.display.update()
         clock.tick(frame_rate) #frames per minute
 
-#TIMER
+#TIMER borrowed from http://programarcadegames.com/python_examples/show_file.php?file=timer.py
 total_seconds = (frame_count // frame_rate)
 if total_seconds < 0:
     total_seconds = 0
