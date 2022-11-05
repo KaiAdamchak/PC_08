@@ -1,1 +1,57 @@
+'''
+DESCRIPTION
 
+AUTHOR: Kai, Olivia, Rylee
+November 2022
+
+'''
+import pygame, random
+pygame.init()
+
+# Window
+w = 600
+h = 600
+win = pygame.display.set_mode((w, h))
+
+# make a rectangle Surface & add to window
+class Bubble:
+    def __init__(self):
+        self.x = random.randint(0, 600) #picks a random x coordinate
+        self.y = random.randint(0, 600) #picks a random y coordinate
+        self.color = "blue" #sets default color of bubbles to blue
+        self.bubble = pygame.draw.Circle(win, self.color, (self.x, self.y), 30)  # store location info for pygame
+
+    def show(self):
+        win.blit(self.face, [self.x, self.y])
+
+    def key(self, event, pop=pygame.MOUSEBUTTONDOWN): 
+        if event.type ==  pygame.MOUSEBUTTONDOWN:
+            if (event.key == pop):
+                self.color = "black" #when the mouse is clicked the bubble turns black to match the background and "disappear"
+                print("POP!") #prints POP! in terminal each time the mouse is clicked
+ 
+#___________________________________________________________________________________________
+
+def main():
+    bubble = Bubble() #set bubble equal to it's object
+    clock = pygame.time.Clock() #initiate clock
+    running = True
+    
+    while running:
+        win.fill("black") #makes the screen black each time it runs
+        
+        for event in pygame.event.get():
+            # ========= Add events here ========= 
+            bubble.key(event)
+            if (event.type == pygame.QUIT):
+                pygame.quit()
+
+        # ========= Add draw tasks here ========= 
+        
+        bubble.show() #show the bubble
+        
+        pygame.display.update()
+        clock.tick(30) #frames per minute
+
+#  ========= Runs the code: ========= 
+main()
