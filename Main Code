@@ -13,6 +13,9 @@ w = 600
 h = 600
 win = pygame.display.set_mode((w, h))
 
+frame_count = 0
+frame_rate = 30
+
 # make a rectangle Surface & add to window
 class Bubble:
     def __init__(self, x, y):
@@ -36,34 +39,37 @@ class Bubble:
 
         self.show() #display on window
 
-    def key(self, event, pop = pygame.MOUSEBUTTONDOWN):
-        if (event.type == pygame.KEYDOWN):
-            if (event.key == pop):
-                self.color = "black"
-                print("pop")
+    def key(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = pygame.mouse.get_pos()
+
+            if (pygame.mouse.get_pressed()[0]):
+                if self.box.collidepoit(x, y):
+                    self.draw = False
+                    print("pop")
 
 #___________________________________________________________________________________________
 def main():
-    frame_count = 0
-    frame_rate = 30
-
-    x = random.randint(0,w)
-    y = random.randint(0,h)
-    bubble = Bubble(x, y)
     clock = pygame.time.Clock() #initiate clock
     running = True
-    
+
+    bubbleList = []
+    for i in range(10):
+        x = random.randint(0,w)
+        y = random.randint(0,h)
+        bubbleList.append(Bubble(x,y))
+
     while running:
         win.fill("black") #makes the screen black each time it runs
 
-        bubble.show()
-        bubble.move()
-
+        for bubble in bubbleList:
+            bubble.move()
         for event in pygame.event.get():
             # ========= Add events here ========= 
-            bubble.key(event) 
-            if (event.type == pygame.QUIT):
-                pygame.quit()
+            for bubble in bubbleList:
+                bubble.key(event) 
+            #if (event.type == pygame.QUIT):
+                #pygame.quit()
 
         # ========= Add draw tasks here ========= 
         
@@ -73,12 +79,10 @@ def main():
     frame_count += 1
 
     #TIMER, borrowed from http://programarcadegames.com/python_examples/show_file.php?file=timer.py
-    total_seconds = (frame_count // frame_rate)
-    if total_seconds < 0:
-        total_seconds = 0
-    if total_seconds == 1:
-        print("Game Over")
-        pygame.quit()
+total_seconds = (frame_count // frame_rate)
+if total_seconds == 1:
+    print("Game Over")
+    pygame.quit()
 
 #  ========= Runs the code: ========= 
 main()
