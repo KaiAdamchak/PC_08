@@ -13,46 +13,52 @@ w = 600
 h = 600
 win = pygame.display.set_mode((w, h))
 
-frame_count = 0
-frame_rate = 30
-
 # make a rectangle Surface & add to window
 class Bubble:
-    def xpos():
-        running = True
-        while running:
-            newX = random.randint(0, 600)
-            return newX
-    def ypos():
-        running = True
-        while running:
-            newY = random.randint(0,600)
-            return newY
-
     def __init__(self, x, y):
-        self.x = xpos()
-        self.y = ypos()
-        self.color = "blue" #sets default color of bubbles to blue
-        self.bubble = pygame.draw.Circle(win, self.color, (self.x, self.y), 30)  # store location info for pygame
+        self.x = x
+        self.y = y
+        self.rad = 30
+        self.color = "light blue" #sets default color of bubbles to blue
+        self.draw = True
+
+        self.show()
 
     def show(self):
-        win.blit(self.face, [self.x, self.y])
+        if (self.draw):
+            self.box = pygame.draw.circle(win, self.color, (self.x, self.y), self.rad)
 
-    def key(self, event, pop=pygame.MOUSEBUTTONDOWN): 
-        if event.type ==  pygame.MOUSEBUTTONDOWN:
+    def move(self):
+        dx = random.randint(-10, 10)
+        dy = random.randint(-10, 10)
+        self.x += dx #updates x position
+        self.y += dy #updates y position 
+
+        self.show() #display on window
+
+    def key(self, event, pop = pygame.MOUSEBUTTONDOWN):
+        if (event.type == pygame.KEYDOWN):
             if (event.key == pop):
-                self.color = "black" #when the mouse is clicked the bubble turns black to match the background and "disappear"
-                print("POP!") #prints POP! in terminal each time the mouse is clicked
+                self.color = "black"
+                print("pop")
 
 #___________________________________________________________________________________________
 def main():
-    bubble = Bubble()
+    frame_count = 0
+    frame_rate = 30
+
+    x = random.randint(0,w)
+    y = random.randint(0,h)
+    bubble = Bubble(x, y)
     clock = pygame.time.Clock() #initiate clock
     running = True
     
     while running:
         win.fill("black") #makes the screen black each time it runs
-        
+
+        bubble.show()
+        bubble.move()
+
         for event in pygame.event.get():
             # ========= Add events here ========= 
             bubble.key(event) 
@@ -61,19 +67,18 @@ def main():
 
         # ========= Add draw tasks here ========= 
         
-        bubble.show() #show the bubble
-        
-        frame_count +=1
         pygame.display.update()
         clock.tick(frame_rate) #frames per minute
 
-#TIMER, borrowed from http://programarcadegames.com/python_examples/show_file.php?file=timer.py
-total_seconds = (frame_count // frame_rate)
-if total_seconds < 0:
-    total_seconds = 0
-if total_seconds == 1:
-    print("Game Over")
-    pygame.quit()
+    frame_count += 1
+
+    #TIMER, borrowed from http://programarcadegames.com/python_examples/show_file.php?file=timer.py
+    total_seconds = (frame_count // frame_rate)
+    if total_seconds < 0:
+        total_seconds = 0
+    if total_seconds == 1:
+        print("Game Over")
+        pygame.quit()
 
 #  ========= Runs the code: ========= 
 main()
